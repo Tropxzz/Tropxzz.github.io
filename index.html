@@ -7,7 +7,7 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background-color: #f0f0f0;
+      background-color: #000;
       margin: 0;
       padding: 0;
     }
@@ -24,12 +24,13 @@
       width: 100px;
       height: 100px;
       margin-bottom: 20px;
+      filter: drop-shadow(0 0 5px #c33df1);
     }
 
     .message {
       font-size: 24px;
       text-align: center;
-      color: #333;
+      color: #fff;
     }
   </style>
   <script>
@@ -68,21 +69,46 @@
             checkVPN();
           } else {
             // VPN is not active
-            return false;
+            var message = document.getElementById('message');
+            message.textContent = 'No VPN opening';
           }
         })
         .catch(error => {
           console.error('Error retrieving IP:', error);
           // Handle the error if IP retrieval fails
-          return false;
+          var message = document.getElementById('message');
+          message.textContent = 'No VPN. opening, please be patience;
         });
+    }
+    
+    // Function to animate the dots in the message
+    function animateDots() {
+      var message = document.getElementById('message');
+      var dots = '';
+      var counter = 0;
+      var intervalId = setInterval(function() {
+        dots += '.';
+        message.textContent = 'Checking VPN status' + dots;
+        counter++;
+        if (counter === 3) {
+          dots = '';
+          counter = 0;
+        }
+      }, 1000);
+      
+      setTimeout(function() {
+        clearInterval(intervalId);
+        message.textContent = 'Checking VPN status...';
+        checkVPN();
+      }, 5000);
     }
   </script>
 </head>
-<body onload="checkVPN()">
+<body onload="animateDots()">
   <div class="container">
-    <img class="icon" src="https://cdn.icon-icons.com/icons2/1875/PNG/512/script_120049.png" alt="Script Icon">
-    <p id="message" class="message">Checking VPN status...</p>
+    <img class="icon" src="https://cdn.icon-icons.com/icons2/1875/PNG/512/script_120
+049.png" alt="Script Icon">
+<p id="message" class="message">Checking VPN status...</p>
   </div>
 </body>
 </html>
